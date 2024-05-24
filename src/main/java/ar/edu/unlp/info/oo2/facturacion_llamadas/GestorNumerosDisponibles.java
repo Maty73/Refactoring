@@ -6,47 +6,31 @@ import java.util.Random;
 import java.util.SortedSet;
 
 public class GestorNumerosDisponibles {
-	private SortedSet<String> lineas = new TreeSet<String>();
-	private String tipoGenerador = "ultimo";
+	private SortedSet<String> numerosDisponibles = new TreeSet<String>();
+	private TipoGenerador tipoGenerador;
 
-	public SortedSet<String> getLineas() {
-		return lineas;
+
+	public GestorNumerosDisponibles() {
+		this.tipoGenerador = new TipoUltimo();
+	}
+
+	public GestorNumerosDisponibles(TipoGenerador tipoGenerador) {
+		this.tipoGenerador = tipoGenerador;
+	}
+
+	public void setTipoGenerador(TipoGenerador tipoGenerador) {
+		this.tipoGenerador = tipoGenerador;
+	}
+
+	public SortedSet<String> getNumerosDisponibles() {
+		return numerosDisponibles;
 	}
 
 	public String obtenerNumeroLibre() {
-		String linea;
-		switch (tipoGenerador) {
-			case "ultimo":
-				linea = lineas.last();
-				lineas.remove(linea);
-				return linea;
-			case "primero":
-				linea = lineas.first();
-				lineas.remove(linea);
-				return linea;
-			case "random":
-				linea = new ArrayList<String>(lineas)
-						.get(new Random().nextInt(lineas.size()));
-				lineas.remove(linea);
-				return linea;
-		}
-		return null;
-	}
-
-	public void cambiarTipoGenerador(String valor) {
-		this.tipoGenerador = valor;
+		return this.tipoGenerador.obtenerNumeroLibre(this);
 	}
 
 	public boolean agregarNumeroTelefono(String str) {
-		boolean encontre = getLineas().contains(str);
-		if (!encontre) {
-			getLineas().add(str);
-			encontre= true;
-			return encontre;
-		}
-		else {
-			encontre= false;
-			return encontre;
-		}
+		return getNumerosDisponibles().add(str);
 	}
 }
